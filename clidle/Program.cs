@@ -178,8 +178,8 @@
         private static Random rand = new Random();
         public static void Main(string[] args)
         {
-            WordList wl = new WordList("words.txt");
-            WordList vg = new WordList("valid_guesses.txt");
+            WordList wl = new WordList("~/words.txt");
+            WordList vg = new WordList("~/valid_guesses.txt");
             bool lost = true;
             const int tries = 6;
             List <Word> guesses = new List<Word>();
