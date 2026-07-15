@@ -7,15 +7,19 @@
 
         public WordList(string p)
         {
-            this.path = p;
-            using (StreamReader sr = new StreamReader(path))
+            if (File.Exists(p))
             {
-                string line;
-                while ((line = sr.ReadLine()) != null)
+                path = p;
+                foreach (string i in File.ReadLines(p))
                 {
-                    words.Add(line);
+                    words.Add(i);
                 }
             }
+            else
+            {
+                System.Console.Write("Error");
+            }
+            
         }
 
         public void Write()
@@ -178,8 +182,24 @@
         private static Random rand = new Random();
         public static void Main(string[] args)
         {
-            WordList wl = new WordList("~/words.txt");
-            WordList vg = new WordList("~/valid_guesses.txt");
+            WordList wl;            
+            WordList vg;            
+            string file1 = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),"words.txt");
+            string file2 = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),"valid_guesses.txt");
+
+            if (File.Exists(file1) && File.Exists(file2))
+            {
+                wl = new WordList(file1);
+                vg = new WordList(file2);
+            }else if (File.Exists("words.txt") && File.Exists("valid_guesses.txt"))
+            {
+                wl = new WordList("words.txt");
+                vg = new WordList("valid_guesses.txt");  
+            }else
+            {
+                System.Console.WriteLine("Error");
+                return;
+            }
             bool lost = true;
             const int tries = 6;
             List <Word> guesses = new List<Word>();
@@ -204,6 +224,7 @@
                 k.Write();
                 Console.WriteLine();
                 given_word = Console.ReadLine();
+
                 if (Check(given_word,vg))
                 {
                     guesses.Add(new Word(given_word));
